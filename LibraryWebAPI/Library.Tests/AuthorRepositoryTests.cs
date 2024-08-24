@@ -7,7 +7,7 @@ namespace Library.Tests
 {
     public class AuthorRepositoryTests
     {
-        private List<Author> _categories = new List<Author>
+        private List<Author> _authors = new List<Author>
         {
             new Author {AuthorId = 1, AuthorName = "FirstAuthor"},
             new Author {AuthorId = 2, AuthorName = "SecondAuthor"},
@@ -27,8 +27,8 @@ namespace Library.Tests
             IAuthorRepository repo = new AuthorRepository(context);
 
             Assert.True(!context.Authors.Any());
-            var categories = await repo.GetAuthorsAsync();
-            Assert.True(categories.Count == 0);
+            var authors = await repo.GetAuthorsAsync();
+            Assert.True(authors.Count == 0);
         }
 
         [Fact]
@@ -39,15 +39,15 @@ namespace Library.Tests
                 .Options;
 
             var context = new LibraryContext(options);
-            await context.Authors.AddRangeAsync(_categories);
+            await context.Authors.AddRangeAsync(_authors);
             await context.SaveChangesAsync();
             IAuthorRepository repo = new AuthorRepository(context);
 
             Assert.True(context.Authors.Any());
-            var categories = await repo.GetAuthorsAsync();
-            Assert.True(categories.Any());
-            Assert.True(categories.Count == _categories.Count);
-            Assert.Equal(_categories, categories);
+            var authors = await repo.GetAuthorsAsync();
+            Assert.True(authors.Any());
+            Assert.True(authors.Count == _authors.Count);
+            Assert.Equal(_authors, authors);
         }
 
         [Fact]
@@ -73,14 +73,14 @@ namespace Library.Tests
                 .Options;
 
             var context = new LibraryContext(options);
-            await context.Authors.AddAsync(_categories.ElementAt(0));
+            await context.Authors.AddAsync(_authors.ElementAt(0));
             await context.SaveChangesAsync();
             IAuthorRepository repo = new AuthorRepository(context);
 
             Assert.True(context.Authors.Any());
-            var category = await repo.GetAuthorByIdAsync(_categories.ElementAt(0).AuthorId);
-            Assert.NotNull(category);
-            Assert.Equal(_categories.ElementAt(0), category);
+            var author = await repo.GetAuthorByIdAsync(_authors.ElementAt(0).AuthorId);
+            Assert.NotNull(author);
+            Assert.Equal(_authors.ElementAt(0), author);
         }
 
         [Fact]
@@ -94,10 +94,10 @@ namespace Library.Tests
             IAuthorRepository repo = new AuthorRepository(context);
 
 
-            Assert.Null(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _categories.ElementAt(0).AuthorId));
-            var category = await repo.CreateAuthorAsync(_categories.ElementAt(0));
-            Assert.NotNull(category);
-            Assert.Equal(_categories.ElementAt(0), category);
+            Assert.Null(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _authors.ElementAt(0).AuthorId));
+            var author = await repo.CreateAuthorAsync(_authors.ElementAt(0));
+            Assert.NotNull(author);
+            Assert.Equal(_authors.ElementAt(0), author);
         }
 
         [Fact]
@@ -111,9 +111,9 @@ namespace Library.Tests
             IAuthorRepository repo = new AuthorRepository(context);
 
 
-            Assert.Null(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _categories.ElementAt(0).AuthorId));
+            Assert.Null(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _authors.ElementAt(0).AuthorId));
            
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => repo.DeleteAuthorAsync(_categories.ElementAt(0).AuthorId));
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => repo.DeleteAuthorAsync(_authors.ElementAt(0).AuthorId));
         }
 
         [Fact]
@@ -124,13 +124,13 @@ namespace Library.Tests
                 .Options;
 
             var context = new LibraryContext(options);
-            await context.Authors.AddAsync(_categories.ElementAt(0));
+            await context.Authors.AddAsync(_authors.ElementAt(0));
             await context.SaveChangesAsync();
             IAuthorRepository repo = new AuthorRepository(context);
 
-            Assert.NotNull(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _categories.ElementAt(0).AuthorId));
-            await repo.DeleteAuthorAsync(_categories.ElementAt(0).AuthorId);
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => repo.DeleteAuthorAsync(_categories.ElementAt(0).AuthorId));
+            Assert.NotNull(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _authors.ElementAt(0).AuthorId));
+            await repo.DeleteAuthorAsync(_authors.ElementAt(0).AuthorId);
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => repo.DeleteAuthorAsync(_authors.ElementAt(0).AuthorId));
         }
 
 
@@ -145,9 +145,9 @@ namespace Library.Tests
             IAuthorRepository repo = new AuthorRepository(context);
 
 
-            Assert.Null(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _categories.ElementAt(0).AuthorId));
+            Assert.Null(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _authors.ElementAt(0).AuthorId));
 
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => repo.UpdateAuthorAsync(_categories.ElementAt(0)));
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => repo.UpdateAuthorAsync(_authors.ElementAt(0)));
         }
 
         [Fact]
@@ -158,21 +158,21 @@ namespace Library.Tests
                 .Options;
 
             var context = new LibraryContext(options);
-            await context.Authors.AddAsync(_categories.ElementAt(0));
+            await context.Authors.AddAsync(_authors.ElementAt(0));
             await context.SaveChangesAsync();
 
-            var categoryToUpdate = new Author
+            var authorToUpdate = new Author
             {
                 AuthorName = "UpdatedName",
-                AuthorId = _categories.ElementAt(0).AuthorId
+                AuthorId = _authors.ElementAt(0).AuthorId
             };
             IAuthorRepository repo = new AuthorRepository(context);
 
-            Assert.NotNull(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _categories.ElementAt(0).AuthorId));
+            Assert.NotNull(await context.Authors.FirstOrDefaultAsync(c => c.AuthorId == _authors.ElementAt(0).AuthorId));
 
-            var categoryUpdated = await repo.UpdateAuthorAsync(categoryToUpdate);
-            Assert.NotSame(categoryToUpdate, categoryUpdated);
-            Assert.Equal(categoryToUpdate.AuthorName, categoryUpdated.AuthorName);
+            var authorUpdated = await repo.UpdateAuthorAsync(authorToUpdate);
+            Assert.NotSame(authorToUpdate, authorUpdated);
+            Assert.Equal(authorToUpdate.AuthorName, authorUpdated.AuthorName);
         }
     }
 }
