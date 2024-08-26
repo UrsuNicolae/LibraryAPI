@@ -28,7 +28,7 @@ namespace Library.Tests
 
             Assert.True(!context.Categories.Any());
             var categories = await repo.GetCategoriesAsync();
-            Assert.True(categories.Count == 0);
+            Assert.True(categories.Items.Count == 0);
         }
 
         [Fact]
@@ -45,9 +45,9 @@ namespace Library.Tests
 
             Assert.True(context.Categories.Any());
             var categories = await repo.GetCategoriesAsync();
-            Assert.True(categories.Any());
-            Assert.True(categories.Count == _categories.Count);
-            Assert.Equal(_categories, categories);
+            Assert.True(categories.Items.Any());
+            Assert.True(categories.Items.Count == _categories.Count);
+            Assert.Equal(_categories, categories.Items);
         }
 
         [Fact]

@@ -1,6 +1,8 @@
 ﻿using LibraryDataAccess.Data;
 using LibraryDataAccess.Models;
+using Libray.Core;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace LibraryDataAccess.Repositories
 {
@@ -36,9 +38,13 @@ namespace LibraryDataAccess.Repositories
             return await _context.Books.FirstOrDefaultAsync(b => b.BookId == id);
         }
 
-        public async Task<List<Book>> GetBooksAsync()
+        public async Task<PaginatedList<Book>> GetBooksAsync(int page, int nr)
         {
-            return await _context.Books.ToListAsync();
+            var count = _context.Books.Count();
+            var totalPages = (int)Math.Ceiling(count / (double)nr);
+            var books = await _context.Books.Skip((page - 1) * nr).Take(nr).ToListAsync();
+
+            return new PaginatedList<Book>(books, page, totalPages);
         }
 
         public async Task<Book> UpdateBookAsync(Book book)

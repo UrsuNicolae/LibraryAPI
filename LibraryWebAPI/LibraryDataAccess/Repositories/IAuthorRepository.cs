@@ -1,10 +1,11 @@
 ﻿using LibraryDataAccess.Models;
+using Libray.Core;
 
 namespace LibraryDataAccess.Repositories
 {
     public interface IAuthorRepository
     {
-        Task<List<Author>> GetAuthorsAsync();
+        Task<PaginatedList<Author>> GetAuthorsAsync(int page = 1, int nr = 10);
 
         Task<Author?> GetAuthorByIdAsync(int id);
 

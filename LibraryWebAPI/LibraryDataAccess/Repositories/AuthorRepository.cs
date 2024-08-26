@@ -1,7 +1,7 @@
 ﻿using LibraryDataAccess.Data;
 using LibraryDataAccess.Models;
+using Libray.Core;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace LibraryDataAccess.Repositories
 {
@@ -38,9 +38,13 @@ namespace LibraryDataAccess.Repositories
             return await _context.Authors.FirstOrDefaultAsync(c => c.AuthorId == id);
         }
 
-        public async Task<List<Author>> GetAuthorsAsync()
+        public async Task<PaginatedList<Author>> GetAuthorsAsync(int page, int nr)
         {
-            return await _context.Authors.ToListAsync();
+            var count = _context.Authors.Count();
+            var totalPages = (int)Math.Ceiling(count / (double)nr);
+            var authors = await _context.Authors.Skip((page - 1) * nr).Take(nr).ToListAsync();
+
+            return new PaginatedList<Author>(authors, page, totalPages);
         }
 
         public async Task<Author> UpdateAuthorAsync(Author author)

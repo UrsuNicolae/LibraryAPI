@@ -28,7 +28,7 @@ namespace Library.Tests
 
             Assert.True(!context.Books.Any());
             var books = await repo.GetBooksAsync();
-            Assert.True(books.Count == 0);
+            Assert.True(books.Items.Count == 0);
         }
 
         [Fact]
@@ -45,9 +45,9 @@ namespace Library.Tests
 
             Assert.True(context.Books.Any());
             var books = await repo.GetBooksAsync();
-            Assert.True(books.Any());
-            Assert.True(books.Count == _books.Count);
-            Assert.Equal(_books, books);
+            Assert.True(books.Items.Any());
+            Assert.True(books.Items.Count == _books.Count);
+            Assert.Equal(_books, books.Items);
         }
 
         [Fact]

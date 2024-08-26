@@ -5,7 +5,6 @@ namespace LibraryDataAccess.Data
 {
     public class LibraryContext : DbContext
     {
-        private string ConnectionString;
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Author> Authors { get; set; }
@@ -13,17 +12,7 @@ namespace LibraryDataAccess.Data
 
         public LibraryContext(DbContextOptions<LibraryContext> optionsBuilder) : base(optionsBuilder)
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            ConnectionString = System.IO.Path.Join(path, "library.db");
         }
-
-       /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite($"Data Source={ConnectionString}");
-            base.OnConfiguring(optionsBuilder);
-        }
-*/
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>(entity =>

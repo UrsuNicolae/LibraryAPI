@@ -28,7 +28,7 @@ namespace Library.Tests
 
             Assert.True(!context.Authors.Any());
             var authors = await repo.GetAuthorsAsync();
-            Assert.True(authors.Count == 0);
+            Assert.True(authors.Items.Count == 0);
         }
 
         [Fact]
@@ -45,9 +45,9 @@ namespace Library.Tests
 
             Assert.True(context.Authors.Any());
             var authors = await repo.GetAuthorsAsync();
-            Assert.True(authors.Any());
-            Assert.True(authors.Count == _authors.Count);
-            Assert.Equal(_authors, authors);
+            Assert.True(authors.Items.Any());
+            Assert.True(authors.Items.Count == _authors.Count);
+            Assert.Equal(_authors, authors.Items);
         }
 
         [Fact]
